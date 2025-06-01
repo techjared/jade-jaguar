@@ -1,4 +1,4 @@
-// JavaScript Documentdocument.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // Get references to HTML elements
     const correctCountSpan = document.getElementById('correctCount');
     const incorrectCountSpan = document.getElementById('incorrectCount');

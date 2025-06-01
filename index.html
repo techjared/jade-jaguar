@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Data Collector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Speech Data Collection</h1>
+
+        <div class="counter-display">
+            <p>Correct: <span id="correctCount">0</span></p>
+            <p>Incorrect: <span id="incorrectCount">0</span></p>
+            <p>Approximation: <span id="approxCount">0</span></p>
+        </div>
+
+        <div class="buttons">
+            <button id="correctBtn" class="action-btn">Correct (+)</button>
+            <button id="incorrectBtn" class="action-btn">Incorrect (-)</button>
+            <button id="approxBtn" class="action-btn">Approximation (~)</button>
+        </div>
+
+        <button id="resetBtn" class="reset-btn">Reset All</button>
+
+        <div class="output-section">
+            <h2>Data Summary</h2>
+            <pre id="dataOutput" class="data-output-box"></pre>
+            <button id="copyToClipboardBtn" class="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

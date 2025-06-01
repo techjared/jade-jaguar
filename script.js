@@ -1,127 +1,149 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Array to store data for multiple targets
-    let targetsData = [
-        {
-            name: "Target 1",
-            correct: 0,
-            incorrect: 0,
-            approx: 0
-        },
-        {
-            name: "Target 2",
-            correct: 0,
-            incorrect: 0,
-            approx: 0
-        }
-    ];
+    // --- Get references to HTML elements ---
+    const target1LabelInput = document.getElementById('target1Label');
+    const target2LabelInput = document.getElementById('target2Label');
+    const displayTarget1Label = document.getElementById('displayTarget1Label');
+    const displayTarget2Label = document.getElementById('displayTarget2Label');
 
     const dataOutputPre = document.getElementById('dataOutput');
     const resetAllBtn = document.getElementById('resetAllBtn');
     const copyToClipboardBtn = document.getElementById('copyToClipboardBtn');
 
-    // --- Function to initialize and get references for each target ---
-    function setupTarget(index) {
-        const targetBlock = document.querySelector(`.target-block:nth-child(${index + 1})`);
-        const targetNameInput = targetBlock.querySelector('.target-name-input');
-        const correctCountSpan = targetBlock.querySelector(`#correctCount${index + 1}`);
-        const incorrectCountSpan = targetBlock.querySelector(`#incorrectCount${index + 1}`);
-        const approxCountSpan = targetBlock.querySelector(`#approxCount${index + 1}`);
-
-        const correctBtn = targetBlock.querySelector(`#correctBtn${index + 1}`);
-        const incorrectBtn = targetBlock.querySelector(`#incorrectBtn${index + 1}`);
-        const approxBtn = targetBlock.querySelector(`#approxBtn${index + 1}`);
-
-        // Set initial name from data or default
-        targetNameInput.value = targetsData[index].name;
-
-        // Add event listeners for name input
-        targetNameInput.addEventListener('input', (event) => {
-            targetsData[index].name = event.target.value;
-            generateOutput(); // Update output when name changes
-        });
-
-        // Add event listeners for buttons
-        correctBtn.addEventListener('click', () => {
-            targetsData[index].correct++;
-            updateDisplay(index);
-        });
-
-        incorrectBtn.addEventListener('click', () => {
-            targetsData[index].incorrect++;
-            updateDisplay(index);
-        });
-
-        approxBtn.addEventListener('click', () => {
-            targetsData[index].approx++;
-            updateDisplay(index);
-        });
-
-        return {
-            correctCountSpan,
-            incorrectCountSpan,
-            approxCountSpan,
-            targetNameInput
-        };
-    }
-
-    // Store references to spans and inputs for quick access
-    const targetElements = targetsData.map((_, index) => setupTarget(index));
-
-
-    // --- Functions to update display and output ---
-    function updateDisplay(index = null) {
-        if (index === null) { // Update all targets if no specific index is given
-            targetsData.forEach((data, i) => {
-                targetElements[i].correctCountSpan.textContent = data.correct;
-                targetElements[i].incorrectCountSpan.textContent = data.incorrect;
-                targetElements[i].approxCountSpan.textContent = data.approx;
-            });
-        } else { // Update only a specific target
-            targetElements[index].correctCountSpan.textContent = targetsData[index].correct;
-            targetElements[index].incorrectCountSpan.textContent = targetsData[index].incorrect;
-            targetElements[index].approxCountSpan.textContent = targetsData[index].approx;
+    // Store data for each target in an array of objects
+    // Each object will have: { label: string, correct: number, incorrect: number, approx: number }
+    let targets = [
+        { label: 'Target 1', correct: 0, incorrect: 0, approx: 0,
+          correctCountSpan: document.getElementById('correctCount1'),
+          incorrectCountSpan: document.getElementById('incorrectCount1'),
+          approxCountSpan: document.getElementById('approxCount1'),
+          correctBtn: document.getElementById('correctBtn1'),
+          incorrectBtn: document.getElementById('incorrectBtn1'),
+          approxBtn: document.getElementById('approxBtn1')
+        },
+        { label: 'Target 2', correct: 0, incorrect: 0, approx: 0,
+          correctCountSpan: document.getElementById('correctCount2'),
+          incorrectCountSpan: document.getElementById('incorrectCount2'),
+          approxCountSpan: document.getElementById('approxCount2'),
+          correctBtn: document.getElementById('correctBtn2'),
+          incorrectBtn: document.getElementById('incorrectBtn2'),
+          approxBtn: document.getElementById('approxBtn2')
         }
-        generateOutput();
+    ];
+
+    // --- Local Storage Functions ---
+    const STORAGE_KEY = 'speechDataApp';
+
+    function saveTargets() {
+        // We only want to save the data (label, counts), not the DOM element references
+        const dataToSave = targets.map(target => ({
+            label: target.label,
+            correct: target.correct,
+            incorrect: target.incorrect,
+            approx: target.approx
+        }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
     }
 
+    function loadTargets() {
+        const storedData = localStorage.getItem(STORAGE_KEY);
+        if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            // Iterate through parsedData and update our `targets` array
+            parsedData.forEach((data, index) => {
+                if (targets[index]) { // Ensure the target exists in our structure
+                    targets[index].label = data.label;
+                    targets[index].correct = data.correct;
+                    targets[index].incorrect = data.incorrect;
+                    targets[index].approx = data.approx;
+                }
+            });
+        }
+    }
+
+    // --- Update Display Function ---
+    function updateDisplay() {
+        // Update label inputs
+        target1LabelInput.value = targets[0].label;
+        target2LabelInput.value = targets[1].label;
+
+        // Update display labels
+        displayTarget1Label.textContent = targets[0].label;
+        displayTarget2Label.textContent = targets[1].label;
+
+        // Update counts for each target
+        targets.forEach(target => {
+            target.correctCountSpan.textContent = target.correct;
+            target.incorrectCountSpan.textContent = target.incorrect;
+            target.approxCountSpan.textContent = target.approx;
+        });
+
+        generateOutput();
+        saveTargets(); // Save data to localStorage after every display update
+    }
+
+    // --- Generate Plain Text Output ---
     function generateOutput() {
-        let outputText = `Speech Data Summary (${new Date().toLocaleString()}):\n\n`; // Add timestamp
+        let outputText = `--- Speech Data Summary ---\n\n`;
 
-        targetsData.forEach(target => {
+        targets.forEach((target, index) => {
             const totalTrials = target.correct + target.incorrect + target.approx;
-            let correctPercentage = "N/A";
-            if (totalTrials > 0) {
-                correctPercentage = (target.correct / totalTrials * 100).toFixed(2) + "%";
-            }
+            const correctPercentage = totalTrials > 0
+                ? (target.correct / totalTrials * 100).toFixed(2)
+                : 'N/A';
 
-            outputText += `--- ${target.name} ---\n`;
-            outputText += `Correct (+): ${target.correct}\n`;
-            outputText += `Incorrect (-): ${target.incorrect}\n`;
-            outputText += `Approximations (~): ${target.approx}\n`;
-            outputText += `Total Trials: ${totalTrials}\n`;
-            outputText += `Correct Percentage: ${correctPercentage}\n\n`;
+            outputText += `Target ${index + 1}: ${target.label}\n`;
+            outputText += `  Correct (+): ${target.correct}\n`;
+            outputText += `  Incorrect (-): ${target.incorrect}\n`;
+            outputText += `  Approximations (~): ${target.approx}\n`;
+            outputText += `  Total Trials: ${totalTrials}\n`;
+            outputText += `  Correct Percentage: ${correctPercentage}%\n\n`;
         });
 
         dataOutputPre.textContent = outputText;
-        saveData(); // Save data to localStorage after every change
     }
 
-    // --- Reset Function ---
+    // --- Event Listeners ---
+
+    // Listen for changes in the target label input fields
+    target1LabelInput.addEventListener('input', () => {
+        targets[0].label = target1LabelInput.value;
+        updateDisplay();
+    });
+
+    target2LabelInput.addEventListener('input', () => {
+        targets[1].label = target2LabelInput.value;
+        updateDisplay();
+    });
+
+    // Attach event listeners to each target's buttons
+    targets.forEach((target, index) => {
+        target.correctBtn.addEventListener('click', () => {
+            target.correct++;
+            updateDisplay();
+        });
+
+        target.incorrectBtn.addEventListener('click', () => {
+            target.incorrect++;
+            updateDisplay();
+        });
+
+        target.approxBtn.addEventListener('click', () => {
+            target.approx++;
+            updateDisplay();
+        });
+    });
+
     resetAllBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to reset ALL data for ALL targets?')) {
-            targetsData.forEach(target => {
+        if (confirm('Are you sure you want to reset ALL data for both targets? This cannot be undone.')) {
+            targets.forEach(target => {
                 target.correct = 0;
                 target.incorrect = 0;
                 target.approx = 0;
-                // Reset target names to default as well
-                target.name = `Target ${targetsData.indexOf(target) + 1}`;
-                targetElements[targetsData.indexOf(target)].targetNameInput.value = target.name;
             });
-            updateDisplay(); // Update all displays and output
+            updateDisplay();
         }
     });
 
-    // --- Copy to Clipboard Function ---
     copyToClipboardBtn.addEventListener('click', () => {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(dataOutputPre.textContent)
@@ -163,29 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(textarea);
     }
 
-    // --- LocalStorage for Data Persistence ---
-    function saveData() {
-        localStorage.setItem('speechTargetsData', JSON.stringify(targetsData));
-    }
-
-    function loadData() {
-        const savedData = localStorage.getItem('speechTargetsData');
-        if (savedData) {
-            targetsData = JSON.parse(savedData);
-            // Ensure loaded data has necessary properties (e.g., if new features are added)
-            // This loop updates the initial names for the inputs after loading.
-            targetsData.forEach((target, index) => {
-                if (targetElements[index] && targetElements[index].targetNameInput) {
-                    targetElements[index].targetNameInput.value = target.name;
-                }
-            });
-        }
-    }
-
-    // --- Initial Setup ---
-    // Load data first, then set up target elements based on potentially loaded data
-    loadData();
-    // Re-initialize target elements after loading to ensure spans/inputs are correctly set up
-    targetsData.forEach((_, index) => setupTarget(index)); // Re-run setup to connect inputs
-    updateDisplay(); // Initial display update on page load
+    // --- Initialization ---
+    loadTargets(); // Load data from localStorage first
+    updateDisplay(); // Then update the UI
 });

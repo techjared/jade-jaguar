@@ -1,14 +1,21 @@
 body {
+    /* Existing styles */
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align to the top */
+    align-items: flex-start;
     min-height: 100vh;
     background-color: #f4f7f6;
     margin: 0;
     padding: 20px;
-    box-sizing: border-box; /* Include padding in element's total width and height */
+    box-sizing: border-box;
+
+    /* Add this line to prevent double-tap zoom on the body */
+    touch-action: manipulation;
 }
+
+}
+
 
 .container {
     background-color: #ffffff;

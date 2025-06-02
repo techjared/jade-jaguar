@@ -247,8 +247,30 @@ h1 {
 }
 
 canvas {
-    max-width: 100%; /* Ensure canvas is responsive */
-    height: auto;
+    max-width: 100%;
+    /* Option A: Set a fixed maximum height (e.g., 300px) */
+    max-height: 350px; /* Adjust this value as needed */
+    height: auto; /* Keep auto for responsiveness within max-height */
+
+    /* Option B (more advanced, keeps aspect ratio, less flexible height):
+       If you want a specific aspect ratio, you could use a wrapper div and padding-bottom trick:
+       .chart-container {
+           position: relative;
+           width: 100%;
+           padding-bottom: 75%; // 4:3 aspect ratio (height is 75% of width)
+           height: 0;
+           overflow: hidden;
+       }
+       .chart-container canvas {
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+       }
+       And then wrap your <canvas> in <div class="chart-container">
+       For simplicity, I recommend Option A for now.
+    */
 }
 
 /* Clear history button */

@@ -17,9 +17,9 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
-    max-width: 550px; /* Slightly wider to accommodate two sections better */
+    max-width: 550px;
     width: 100%;
-    margin-top: 20px; /* Add some top margin */
+    margin-top: 20px;
 }
 
 h1 {
@@ -58,7 +58,7 @@ h1 {
     border: 1px solid #ced4da;
     border-radius: 6px;
     font-size: 1em;
-    width: calc(100% - 20px); /* Account for padding */
+    width: calc(100% - 20px);
     box-sizing: border-box;
 }
 
@@ -85,9 +85,8 @@ h1 {
 
 .target-section h2 span {
     font-style: italic;
-    font-weight: normal; /* Make the label less bold than the "Target X" part */
+    font-weight: normal;
 }
-
 
 .counter-display {
     background-color: #e8f0fe;
@@ -128,7 +127,7 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.1s ease;
     width: 100%;
-    touch-action: manipulation; /* Prevent double-tap zoom on buttons as well */
+    touch-action: manipulation;
 }
 
 .action-btn:hover {
@@ -139,20 +138,40 @@ h1 {
     transform: translateY(2px);
 }
 
-.reset-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 12px 20px; /* Slightly larger reset button */
+/* Session control buttons */
+.session-controls {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.session-btn {
+    padding: 12px 20px;
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 25px;
-    touch-action: manipulation; /* Prevent double-tap zoom */
+    flex: 1; /* Distribute space evenly */
+    min-width: 150px; /* Ensure buttons don't get too small */
+    touch-action: manipulation;
 }
 
-.reset-btn:hover {
+.session-btn.end-session {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+.session-btn.end-session:hover {
+    background-color: #218838;
+}
+
+.session-btn.reset-all {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+.session-btn.reset-all:hover {
     background-color: #c82333;
 }
 
@@ -193,10 +212,67 @@ h1 {
     background-color: #218838;
 }
 
+/* Chart Section Styles */
+.chart-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px; /* Space from previous section */
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chart-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.chart-options {
+    margin-bottom: 20px;
+}
+
+.chart-options label {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #555;
+}
+
+.chart-options select {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.95em;
+    background-color: white;
+}
+
+canvas {
+    max-width: 100%; /* Ensure canvas is responsive */
+    height: auto;
+}
+
+/* Clear history button */
+.clear-history-btn { /* Renamed for clarity */
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.clear-history-btn:hover {
+    background-color: #c82333;
+}
+
+
 /* Media queries for smaller screens */
 @media (max-width: 600px) {
     .container {
-        padding: 15px; /* Less padding on small screens */
+        padding: 15px;
     }
 
     h1 {
@@ -219,6 +295,15 @@ h1 {
     }
 
     .target-inputs input[type="text"] {
-        width: 100%; /* Ensure full width on small screens */
+        width: 100%;
+    }
+
+    .session-controls {
+        flex-direction: column; /* Stack session buttons on small screens */
+    }
+
+    .session-btn {
+        min-width: unset; /* Remove min-width when stacked */
+        width: 100%;
     }
 }

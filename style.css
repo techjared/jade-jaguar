@@ -1,25 +1,25 @@
 body {
     font-family: Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align to the top */
+    justify-content: center; /* Centers container horizontally if it doesn't take 100% */
+    align-items: flex-start; /* Aligns to the top vertically */
     min-height: 100vh;
     background-color: #f4f7f6;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+    margin: 0; /* Crucial: Removes default browser margins */
+    padding: 0; /* <--- KEY CHANGE: Let the container handle all padding */
+    box-sizing: border-box; /* Ensures padding and border are included in element's total width/height */
     touch-action: manipulation; /* Prevent double-tap zoom */
 }
 
 .container {
     background-color: #ffffff;
-    padding: 30px;
+    padding: 30px; /* Default desktop padding */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     max-width: 550px;
-    width: 100%;
-    margin-top: 20px;
+    width: 100%; /* Crucial: Makes it take 100% of parent's available width */
+    margin: 20px auto; /* <--- KEY CHANGE: Centers the container horizontally and adds top/bottom margin */
 }
 
 h1 {
@@ -58,7 +58,7 @@ h1 {
     border: 1px solid #ced4da;
     border-radius: 6px;
     font-size: 1em;
-    width: calc(100% - 20px);
+    width: calc(100% - 20px); /* Account for padding */
     box-sizing: border-box;
 }
 
@@ -144,7 +144,7 @@ h1 {
     justify-content: space-around;
     gap: 15px;
     margin-bottom: 30px;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    flex-wrap: wrap;
 }
 
 .session-btn {
@@ -154,13 +154,13 @@ h1 {
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    flex: 1; /* Distribute space evenly */
-    min-width: 150px; /* Ensure buttons don't get too small */
+    flex: 1;
+    min-width: 150px;
     touch-action: manipulation;
 }
 
 .session-btn.end-session {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
 }
 .session-btn.end-session:hover {
@@ -168,7 +168,7 @@ h1 {
 }
 
 .session-btn.reset-all {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545;
     color: white;
 }
 .session-btn.reset-all:hover {
@@ -217,7 +217,7 @@ h1 {
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 20px;
-    margin-top: 30px; /* Space from previous section */
+    margin-top: 30px;
     background-color: #fdfdfd;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -248,33 +248,12 @@ h1 {
 
 canvas {
     max-width: 100%;
-    /* Option A: Set a fixed maximum height (e.g., 300px) */
-    max-height: 350px; /* Adjust this value as needed */
-    height: auto; /* Keep auto for responsiveness within max-height */
-
-    /* Option B (more advanced, keeps aspect ratio, less flexible height):
-       If you want a specific aspect ratio, you could use a wrapper div and padding-bottom trick:
-       .chart-container {
-           position: relative;
-           width: 100%;
-           padding-bottom: 75%; // 4:3 aspect ratio (height is 75% of width)
-           height: 0;
-           overflow: hidden;
-       }
-       .chart-container canvas {
-           position: absolute;
-           top: 0;
-           left: 0;
-           width: 100%;
-           height: 100%;
-       }
-       And then wrap your <canvas> in <div class="chart-container">
-       For simplicity, I recommend Option A for now.
-    */
+    max-height: 350px; /* Keeps chart from being too tall */
+    height: auto;
 }
 
 /* Clear history button */
-.clear-history-btn { /* Renamed for clarity */
+.reset-btn { /* Changed class to .reset-btn to match HTML */
     background-color: #dc3545;
     color: white;
     padding: 10px 15px;
@@ -284,9 +263,10 @@ canvas {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
+    touch-action: manipulation; /* Prevent double-tap zoom */
 }
 
-.clear-history-btn:hover {
+.reset-btn:hover {
     background-color: #c82333;
 }
 
@@ -294,7 +274,8 @@ canvas {
 /* Media queries for smaller screens */
 @media (max-width: 600px) {
     .container {
-        padding: 15px;
+        padding: 15px; /* Adjust as needed, e.g., 10px or 5px */
+        margin-top: 10px; /* Reduce top margin for mobile if desired */
     }
 
     h1 {
@@ -321,11 +302,11 @@ canvas {
     }
 
     .session-controls {
-        flex-direction: column; /* Stack session buttons on small screens */
+        flex-direction: column;
     }
 
     .session-btn {
-        min-width: unset; /* Remove min-width when stacked */
+        min-width: unset;
         width: 100%;
     }
 }

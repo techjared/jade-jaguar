@@ -13,7 +13,7 @@ body {
 
 .container {
     background-color: #ffffff;
-    padding: 0px; /* Default desktop padding */
+    padding: 30px; /* Default desktop padding */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;

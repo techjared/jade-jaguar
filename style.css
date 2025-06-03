@@ -1,23 +1,25 @@
-/* Add this new rule at the very top of your style.css */
+/* Universal box-sizing for all elements */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 html, body {
     overflow-x: hidden; /* Crucial: Prevents horizontal scrolling from appearing */
     margin: 0; /* Ensure no default browser margins */
     padding: 0; /* Ensure no default browser padding */
-    box-sizing: border-box; /* Standardizes box model for all elements */
+    /* box-sizing: border-box is now handled by the universal selector above */
 }
-
 
 body {
     font-family: Arial, sans-serif;
-    /* KEY CHANGES HERE for centering: */
-    display: flex; /* Make the body a flex container */
-    justify-content: center; /* Horizontally centers its direct child (the .container) */
-    align-items: flex-start; /* Aligns content to the top (prevents vertical centering if content is short) */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     min-height: 100vh;
     background-color: #f4f7f6;
-    /* margin and padding are now handled by the html,body rule above and by .container */
     touch-action: manipulation;
 }
+/* No other changes needed for .container here, it remains as is */
 
 .container {
     background-color: #ffffff;
@@ -33,15 +35,27 @@ body {
 /* ... (rest of your existing CSS, no changes needed for this section) ... */
 
 
-/* Media queries for smaller screens */
 @media (max-width: 600px) {
-    .container {
-        /* On small screens, reduce padding to allow more content space */
-        padding: 10px; /* <--- Adjusted padding for mobile, try 5px if 10px is still too much */
-        margin-top: 10px; /* Reduce top margin for mobile if desired */
+    /* ... other media query rules ... */
+
+    .target-inputs input[type="text"] {
+        width: 100%; /* Change from calc(100% - 20px) to simply 100% */
+        /* Padding is now handled by box-sizing: border-box universally */
+        padding: 10px; /* Ensure input padding is consistent */
+        margin: 0; /* Ensure no default input margins */
+        /* Aggressive appearance reset for mobile browsers */
+        -webkit-appearance: none; /* For iOS Safari and other WebKit browsers */
+        -moz-appearance: none;    /* For Firefox */
+        appearance: none;         /* Standard property */
     }
 
-    /* ... (rest of your mobile media queries, no changes needed) ... */
+    .container {
+        /* On small screens, try even less padding */
+        padding: 5px; /* <--- Try reducing this further */
+        margin-top: 10px;
+    }
+
+    /* ... rest of your mobile media queries ... */
 }
 
 h1 {

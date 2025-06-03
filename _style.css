@@ -1,0 +1,46 @@
+/* Add this new rule at the very top of your style.css */
+html, body {
+    overflow-x: hidden; /* Crucial: Prevents horizontal scrolling from appearing */
+    margin: 0; /* Ensure no default browser margins */
+    padding: 0; /* Ensure no default browser padding */
+    box-sizing: border-box; /* Standardizes box model for all elements */
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    /* KEY CHANGES HERE for centering: */
+    display: flex; /* Make the body a flex container */
+    justify-content: center; /* Horizontally centers its direct child (the .container) */
+    align-items: flex-start; /* Aligns content to the top (prevents vertical centering if content is short) */
+    
+    min-height: 100vh;
+    background-color: #f4f7f6;
+    /* margin and padding are now handled by the html,body rule above and by .container */
+    touch-action: manipulation;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px; /* Default desktop padding */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 550px;
+    width: 100%; /* Crucial: Takes 100% of the *available* width */
+    margin: 20px 0; /* <--- KEY CHANGE: Top/bottom margin only. Left/right centering handled by body flexbox */
+}
+
+/* ... (rest of your existing CSS, no changes needed for this section) ... */
+
+
+/* Media queries for smaller screens */
+@media (max-width: 600px) {
+    .container {
+        /* On small screens, reduce padding to allow more content space */
+        padding: 10px; /* <--- Adjusted padding for mobile, try 5px if 10px is still too much */
+        margin-top: 10px; /* Reduce top margin for mobile if desired */
+    }
+
+    /* ... (rest of your mobile media queries, no changes needed) ... */
+}

@@ -1,12 +1,14 @@
-/* Universal box-sizing for all elements */
+/* Update this universal rule at the very top of your style.css */
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 html, body {
-    overflow-x: hidden; /* Crucial: Prevents horizontal scrolling from appearing */
-    margin: 0; /* Ensure no default browser margins */
-    padding: 0; /* Ensure no default browser padding */
+    overflow-x: hidden; /* Still needed to hide potential scrollbar */
+    margin: 0;
+    padding: 0;
+    width: 100vw; /* <--- NEW AGGRESSIVE FIX: Force to viewport width */
+    height: 100%; /* Ensure it takes full height too, preventing potential issues */
     /* box-sizing: border-box is now handled by the universal selector above */
 }
 
@@ -19,11 +21,12 @@ body {
     background-color: #f4f7f6;
     touch-action: manipulation;
 }
-/* No other changes needed for .container here, it remains as is */
 
-* {
-    border: 1px solid red !important; /* <--- ADD THIS TEMPORARILY */
-}
+/* ... (the rest of your CSS remains the same as your last correct version) ... */
+
+/* * {
+    border: 1px solid red !important;
+} */
 
 .container {
     background-color: #ffffff;

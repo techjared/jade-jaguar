@@ -5,8 +5,8 @@ body {
     align-items: flex-start; /* Aligns to the top vertically */
     min-height: 100vh;
     background-color: #f4f7f6;
-    margin: 0; /* Crucial: Removes default browser margins */
-    padding: 0; /* <--- KEY CHANGE: Let the container handle all padding */
+    margin: -25; /* Crucial: Removes default browser margins */
+    padding: -25; /* <--- KEY CHANGE: Let the container handle all padding */
     box-sizing: border-box; /* Ensures padding and border are included in element's total width/height */
     touch-action: manipulation; /* Prevent double-tap zoom */
 }

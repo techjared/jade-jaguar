@@ -13,7 +13,6 @@ body {
     display: flex; /* Make the body a flex container */
     justify-content: center; /* Horizontally centers its direct child (the .container) */
     align-items: flex-start; /* Aligns content to the top (prevents vertical centering if content is short) */
-    
     min-height: 100vh;
     background-color: #f4f7f6;
     /* margin and padding are now handled by the html,body rule above and by .container */
@@ -44,7 +43,7 @@ body {
 
     /* ... (rest of your mobile media queries, no changes needed) ... */
 }
-body {
+/*body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center; 
@@ -53,11 +52,11 @@ body {
     background-color: #f4f7f6;
     margin: 0; 
     padding: 0; 
-    box-sizing: border-box; 
+    box-sizing: border-box;
     touch-action: manipulation;
-} 
+} */
 
-.container {
+/* .container { 
     background-color: #ffffff;
     padding: 30px; 
     border-radius: 12px;
@@ -65,8 +64,8 @@ body {
     text-align: center;
     max-width: 550px;
     width: 100%; 
-    margin: 0px auto; 
-}
+    margin: 20px 0; 
+} */
 
 h1 {
     color: #333;

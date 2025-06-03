@@ -38,8 +38,8 @@ body {
 @media (max-width: 600px) {
     .container {
         /* On small screens, reduce padding to allow more content space */
-        padding: 10px; /* <--- Adjusted padding for mobile, try 5px if 10px is still too much */
-        margin-top: 10px; /* Reduce top margin for mobile if desired */
+        padding: 0px; /* <--- Adjusted padding for mobile, try 5px if 10px is still too much */
+        margin-top: 0px; /* Reduce top margin for mobile if desired */
     }
 
     /* ... (rest of your mobile media queries, no changes needed) ... */

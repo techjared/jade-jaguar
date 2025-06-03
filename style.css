@@ -5,15 +5,15 @@ body {
     align-items: flex-start; /* Aligns to the top vertically */
     min-height: 100vh;
     background-color: #f4f7f6;
-    margin: -25; /* Crucial: Removes default browser margins */
-    padding: -25; /* <--- KEY CHANGE: Let the container handle all padding */
+    margin: 0; /* Crucial: Removes default browser margins */
+    padding: 0; /* <--- KEY CHANGE: Let the container handle all padding */
     box-sizing: border-box; /* Ensures padding and border are included in element's total width/height */
     touch-action: manipulation; /* Prevent double-tap zoom */
 }
 
 .container {
     background-color: #ffffff;
-    padding: 30px; /* Default desktop padding */
+    padding: 0px; /* Default desktop padding */
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;

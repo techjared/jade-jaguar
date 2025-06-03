@@ -21,6 +21,10 @@ body {
 }
 /* No other changes needed for .container here, it remains as is */
 
+* {
+    border: 1px solid red !important; /* <--- ADD THIS TEMPORARILY */
+}
+
 .container {
     background-color: #ffffff;
     padding: 30px; /* Default desktop padding */

@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Speech Data Collector</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Speech Data Collector</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Speech Data Collection</h1>
+    <div class="container">
+        <h1>Speech Data Collection</h1>
 
-        <div class="target-inputs">
-            <div class="input-group">
-                <label for="target1Label">Target 1 Label:</label>
-                <input type="text" id="target1Label" placeholder="e.g., /s/ initial">
-            </div>
-            <div class="input-group">
-                <label for="target2Label">Target 2 Label:</label>
-                <input type="text" id="target2Label" placeholder="e.g., /r/ blends">
-            </div>
-        </div>
+        <div class="target-inputs">
+            <div class="input-group">
+                <label for="target1Label">Target 1 Label:</label>
+                <input type="text" id="target1Label" placeholder="e.g., /s/ initial">
+            </div>
+            <div class="input-group">
+                <label for="target2Label">Target 2 Label:</label>
+                <input type="text" id="target2Label" placeholder="e.g., /r/ blends">
+            </div>
+        </div>
 
-        <div class="target-section">
-            <h2>Target 1: <span id="displayTarget1Label">Target 1</span></h2>
-            <div class="counter-display">
-                <p>Correct: <span id="correctCount1">0</span></p>
-                <p>Incorrect: <span id="incorrectCount1">0</span></p>
-                <p>Approximation: <span id="approxCount1">0</span></p>
-            </div>
-            <div class="buttons">
-                <button id="correctBtn1" class="action-btn">Correct (+)</button>
-                <button id="incorrectBtn1" class="action-btn">Incorrect (-)</button>
-                <button id="approxBtn1" class="action-btn">Approximation (~)</button>
-            </div>
-        </div>
+        <div class="target-section">
+            <h2>Target 1: <span id="displayTarget1Label">Target 1</span></h2>
+            <div class="counter-display">
+                <p>Correct: <span id="correctCount1">0</span></p>
+                <p>Incorrect: <span id="incorrectCount1">0</span></p>
+                <p>Approximation: <span id="approxCount1">0</span></p>
+            </div>
+            <div class="buttons">
+                <button id="correctBtn1" class="action-btn">Correct (+)</button>
+                <button id="incorrectBtn1" class="action-btn">Incorrect (-)</button>
+                <button id="approxBtn1" class="action-btn">Approximation (~)</button>
+            </div>
+        </div>
 
-        <div class="target-section">
-            <h2>Target 2: <span id="displayTarget2Label">Target 2</span></h2>
-            <div class="counter-display">
-                <p>Correct: <span id="correctCount2">0</span></p>
-                <p>Incorrect: <span id="incorrectCount2">0</span></p>
-                <p>Approximation: <span id="approxCount2">0</span></p>
-            </div>
-            <div class="buttons">
-                <button id="correctBtn2" class="action-btn">Correct (+)</button>
-                <button id="incorrectBtn2" class="action-btn">Incorrect (-)</button>
-                <button id="approxBtn2" class="action-btn">Approximation (~)</button>
-            </div>
-        </div>
+        <div class="target-section">
+            <h2>Target 2: <span id="displayTarget2Label">Target 2</span></h2>
+            <div class="counter-display">
+                <p>Correct: <span id="correctCount2">0</span></p>
+                <p>Incorrect: <span id="incorrectCount2">0</span></p>
+                <p>Approximation: <span id="approxCount2">0</span></p>
+            </div>
+            <div class="buttons">
+                <button id="correctBtn2" class="action-btn">Correct (+)</button>
+                <button id="incorrectBtn2" class="action-btn">Incorrect (-)</button>
+                <button id="approxBtn2" class="action-btn">Approximation (~)</button>
+            </div>
+        </div>
 
-        <div class="session-controls">
-            <button id="endSessionBtn" class="session-btn end-session">End Session / Save</button>
-            <button id="resetAllBtn" class="session-btn reset-all">Reset Current Session</button>
-        </div>
+        <div class="session-controls">
+            <button id="endSessionBtn" class="session-btn end-session">End Session / Save</button>
+            <button id="resetAllBtn" class="session-btn reset-all">Reset Current Session</button>
+            <button id="undoBtn" class="session-btn undo-btn">Undo Last Action</button>         </div>
 
-        <div class="output-section">
-            <h2>Current Session Data Summary</h2>
-            <pre id="dataOutput" class="data-output-box"></pre>
-            <button id="copyToClipboardBtn" class="copy-btn">Copy to Clipboard</button>
-        </div>
+        <div class="output-section">
+            <h2>Current Session Data Summary</h2>
+            <pre id="dataOutput" class="data-output-box"></pre>
+            <button id="copyToClipboardBtn" class="copy-btn">Copy to Clipboard</button>
+        </div>
 
-        <div class="chart-section">
-            <h2>Progress Over Sessions</h2>
-            <div class="chart-options">
-                 <label for="chartTargetSelect">Select Target:</label>
-                 <select id="chartTargetSelect">
-                     <option value="0">Target 1</option>
-                     <option value="1">Target 2</option>
-                 </select>
-            </div>
-            <canvas id="progressChart"></canvas>
-            <button id="clearHistoryBtn" class="reset-btn">Clear All Session History</button>
-        </div>
+        <div class="chart-section">
+            <h2>Progress Over Sessions</h2>
+            <div class="chart-options">
+                 <label for="chartTargetSelect">Select Target:</label>
+                 <select id="chartTargetSelect">
+                     <option value="0">Target 1</option>
+                     <option value="1">Target 2</option>
+                 </select>
+            </div>
+            <canvas id="progressChart"></canvas>
+            <button id="clearHistoryBtn" class="reset-btn">Clear All Session History</button>
+        </div>
 
-    </div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayTarget2Label = document.getElementById('displayTarget2Label');
 
     const dataOutputPre = document.getElementById('dataOutput');
-    const endSessionBtn = document.getElementById('endSessionBtn');
-    const resetCurrentSessionBtn = document.getElementById('resetAllBtn');
+    const endSessionBtn = document.getElementById('endSessionBtn'); // New button
+    const resetCurrentSessionBtn = document.getElementById('resetAllBtn'); // Renamed
     const copyToClipboardBtn = document.getElementById('copyToClipboardBtn');
 
     // Chart elements
@@ -15,10 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const chartTargetSelect = document.getElementById('chartTargetSelect');
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
-    // Undo button
-    const undoBtn = document.getElementById('undoBtn'); // NEW: Reference to the undo button
-
     // --- Data Storage ---
+    // This will hold the current session's target data
     let currentSessionTargets = [
         { label: 'Target 1', correct: 0, incorrect: 0, approx: 0,
           correctCountSpan: document.getElementById('correctCount1'),
@@ -30,28 +28,28 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         { label: 'Target 2', correct: 0, incorrect: 0, approx: 0,
           correctCountSpan: document.getElementById('correctCount2'),
-          incorrectCountSpan: document.getElementById('incorrectCount2'),
-          approxCountSpan: document.getElementById('approxCount2'),
+          incorrectCountSpan: document.getElementById('incorrectCount2'), // Corrected this line
+          approxCountSpan: document.getElementById('approxCount2'),      // Corrected this line
           correctBtn: document.getElementById('correctBtn2'),
           incorrectBtn: document.getElementById('incorrectBtn2'),
           approxBtn: document.getElementById('approxBtn2')
         }
     ];
 
+    // This will hold all past session data
+    // Each session will be an object: { timestamp: number, date: string, targets: [] }
     let sessionHistory = [];
-
-    // NEW: Action stack for undo functionality (stores actions for the current session only)
-    let sessionActions = []; // Format: { targetIndex: number, type: 'correct'|'incorrect'|'approx', value: 1|-1 }
 
     // --- Local Storage Keys ---
     const CURRENT_SESSION_STORAGE_KEY = 'speechDataApp_currentSession';
     const SESSION_HISTORY_STORAGE_KEY = 'speechDataApp_sessionHistory';
 
     // --- Chart.js Instance ---
-    let myChart = null;
+    let myChart = null; // To store the Chart.js instance
 
     // --- Local Storage Functions ---
     function saveCurrentSession() {
+        // Only save the data, not DOM element references
         const dataToSave = currentSessionTargets.map(target => ({
             label: target.label,
             correct: target.correct,
@@ -84,16 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const storedHistory = localStorage.getItem(SESSION_HISTORY_STORAGE_KEY);
         if (storedHistory) {
             sessionHistory = JSON.parse(storedHistory);
+            // Ensure timestamps are numbers if they were strings, or convert to Date objects if needed
+            // For charting, we'll format them later.
         }
     }
 
     // --- Update Display and Chart Functions ---
     function updateDisplay() {
+        // Update label inputs
         target1LabelInput.value = currentSessionTargets[0].label;
         target2LabelInput.value = currentSessionTargets[1].label;
+
+        // Update display labels
         displayTarget1Label.textContent = currentSessionTargets[0].label;
         displayTarget2Label.textContent = currentSessionTargets[1].label;
 
+        // Update counts for each target
         currentSessionTargets.forEach(target => {
             target.correctCountSpan.textContent = target.correct;
             target.incorrectCountSpan.textContent = target.incorrect;
@@ -101,13 +105,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         generateOutput();
-        saveCurrentSession();
-        renderChart();
-        updateUndoButtonState(); // NEW: Update undo button state
+        saveCurrentSession(); // Save current session data after every display update
+        renderChart(); // Re-render chart after data changes
     }
 
     function generateOutput() {
         let outputText = `--- Current Session Data ---\n\n`;
+
         currentSessionTargets.forEach((target, index) => {
             const totalTrials = target.correct + target.incorrect + target.approx;
             const correctPercentage = totalTrials > 0
@@ -121,31 +125,34 @@ document.addEventListener('DOMContentLoaded', () => {
             outputText += `  Total Trials: ${totalTrials}\n`;
             outputText += `  Correct Percentage: ${correctPercentage}%\n\n`;
         });
+
         dataOutputPre.textContent = outputText;
     }
 
     function renderChart() {
+        // Destroy existing chart if it exists
         if (myChart) {
             myChart.destroy();
         }
 
         const selectedTargetIndex = parseInt(chartTargetSelect.value);
         if (isNaN(selectedTargetIndex) || !sessionHistory.length) {
+            // No history or invalid selection, clear canvas
             const ctx = progressChartCanvas.getContext('2d');
             ctx.clearRect(0, 0, progressChartCanvas.width, progressChartCanvas.height);
             return;
         }
 
-        const labels = [];
-        const correctPercentages = [];
+        const labels = []; // Dates/Session numbers
+        const correctPercentages = []; // Correct % for the selected target
 
         sessionHistory.forEach((session, index) => {
             const targetData = session.targets[selectedTargetIndex];
-            if (targetData) {
+            if (targetData) { // Ensure data exists for this target in this session
                 const totalTrials = targetData.correct + targetData.incorrect + targetData.approx;
                 const percentage = totalTrials > 0
                     ? (targetData.correct / totalTrials * 100)
-                    : 0;
+                    : 0; // If no trials, percentage is 0 or can be 'null' depending on preference
 
                 labels.push(`Session ${index + 1}\n(${new Date(session.timestamp).toLocaleDateString()})`);
                 correctPercentages.push(percentage);
@@ -154,14 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const ctx = progressChartCanvas.getContext('2d');
         myChart = new Chart(ctx, {
-            type: 'line',
+            type: 'line', // Line chart for progress over time
             data: {
                 labels: labels,
                 datasets: [{
                     label: `Correct % for ${currentSessionTargets[selectedTargetIndex].label}`,
                     data: correctPercentages,
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1,
+                    tension: 0.1, // Smooth the line
                     fill: false,
                     pointBackgroundColor: 'rgb(75, 192, 192)',
                     pointBorderColor: '#fff',
@@ -171,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: false, // Allow canvas to resize freely
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -205,54 +212,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Undo Functions ---
-    function recordAction(targetIndex, type, change) {
-        // Only record if change is an increment (value of 1)
-        if (change === 1) {
-            sessionActions.push({ targetIndex, type });
-        }
-        updateUndoButtonState();
-    }
-
-    function undoLastAction() {
-        if (sessionActions.length > 0) {
-            const lastAction = sessionActions.pop(); // Get the last action
-            const target = currentSessionTargets[lastAction.targetIndex];
-
-            // Decrement the corresponding count
-            if (target && target[lastAction.type] > 0) { // Ensure target and count exist and are positive
-                target[lastAction.type]--;
-                updateDisplay(); // Update UI
-            } else {
-                // If count is already 0, or action type is invalid, put it back on stack and alert
-                sessionActions.push(lastAction);
-                alert('Cannot undo further for this action, count is already zero.');
-            }
-        } else {
-            alert('No actions to undo for the current session.');
-        }
-        updateUndoButtonState();
-    }
-
-    function updateUndoButtonState() {
-        // Disable undo button if no actions are recorded
-        undoBtn.disabled = sessionActions.length === 0;
-        undoBtn.style.opacity = undoBtn.disabled ? '0.5' : '1'; // Optional: visual feedback
-    }
-
     // --- Session Management Functions ---
     function endCurrentSession() {
         const totalTrialsForSession = currentSessionTargets.reduce((sum, target) => sum + target.correct + target.incorrect + target.approx, 0);
 
         if (totalTrialsForSession === 0 && sessionHistory.length > 0 &&
             !confirm('The current session has no data. Do you still want to save it as a new session?')) {
-            return;
+            return; // Don't save empty session if user cancels
         }
 
         if (confirm('Are you sure you want to end the current session and save its data to history? This will reset the current counts to zero.')) {
+            // Create a snapshot of the current session's data
             const sessionSnapshot = {
                 timestamp: Date.now(),
-                date: new Date().toISOString(),
+                date: new Date().toISOString(), // Store ISO string for consistency
                 targets: currentSessionTargets.map(target => ({
                     label: target.label,
                     correct: target.correct,
@@ -263,14 +236,13 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionHistory.push(sessionSnapshot);
             saveSessionHistory();
 
-            // Reset current session counts AND clear undo stack
+            // Reset current session counts
             currentSessionTargets.forEach(target => {
                 target.correct = 0;
                 target.incorrect = 0;
                 target.approx = 0;
             });
-            sessionActions = []; // NEW: Clear undo stack on session end
-            updateDisplay();
+            updateDisplay(); // This will also save and re-render chart
             alert('Current session data saved and counts reset!');
         }
     }
@@ -282,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 target.incorrect = 0;
                 target.approx = 0;
             });
-            sessionActions = []; // NEW: Clear undo stack on current session reset
             updateDisplay();
             alert('Current session data has been reset.');
         }
@@ -292,13 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm('Are you absolutely sure you want to clear ALL saved session history? This cannot be undone.')) {
             sessionHistory = [];
             saveSessionHistory();
-            updateDisplay();
+            updateDisplay(); // This will also re-render chart
             alert('All session history has been cleared.');
         }
     }
 
     // --- Event Listeners ---
 
+    // Listen for changes in the target label input fields
     target1LabelInput.addEventListener('input', () => {
         currentSessionTargets[0].label = target1LabelInput.value;
         updateDisplay();
@@ -309,34 +281,32 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
     });
 
-    currentSessionTargets.forEach((target, targetIndex) => { // Added targetIndex here
+    // Attach event listeners to each target's buttons
+    currentSessionTargets.forEach((target) => { // Removed 'index' from loop as it's not strictly needed here
         target.correctBtn.addEventListener('click', () => {
             target.correct++;
-            recordAction(targetIndex, 'correct', 1); // NEW: Record action
             updateDisplay();
         });
 
         target.incorrectBtn.addEventListener('click', () => {
             target.incorrect++;
-            recordAction(targetIndex, 'incorrect', 1); // NEW: Record action
             updateDisplay();
         });
 
         target.approxBtn.addEventListener('click', () => {
             target.approx++;
-            recordAction(targetIndex, 'approx', 1); // NEW: Record action
             updateDisplay();
         });
     });
 
     // Session control buttons
     endSessionBtn.addEventListener('click', endCurrentSession);
-    resetCurrentSessionBtn.addEventListener('click', resetCurrentSession);
+    resetCurrentSessionBtn.addEventListener('click', resetCurrentSession); // Renamed button variable
 
-    // NEW: Undo button event listener
-    undoBtn.addEventListener('click', undoLastAction);
-
+    // Chart target selection
     chartTargetSelect.addEventListener('change', renderChart);
+
+    // Clear history button
     clearHistoryBtn.addEventListener('click', clearAllSessionHistory);
 
     copyToClipboardBtn.addEventListener('click', () => {
@@ -381,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Initialization ---
-    loadCurrentSession();
-    loadSessionHistory();
-    updateDisplay(); // This will also call updateUndoButtonState initially
+    loadCurrentSession(); // Load current session data
+    loadSessionHistory(); // Load all historical data
+    updateDisplay(); // Update UI, including chart
 });

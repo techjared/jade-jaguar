@@ -215,6 +215,14 @@ h1 {
     background-color: #c82333;
 }
 
+.session-btn.undo-btn {
+    background-color: #6c757d; /* A gray color */
+    color: white;
+}
+.session-btn.undo-btn:hover {
+    background-color: #5a6268;
+}
+
 .output-section h2 {
     color: #333;
     margin-top: 30px;

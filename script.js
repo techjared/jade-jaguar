@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         { label: 'Target 2', correct: 0, incorrect: 0, approx: 0,
           correctCountSpan: document.getElementById('correctCount2'),
-          incorrectCountSpan: document.getElementById('incorrectCount2'), // Corrected this line
-          approxCountSpan: document.getElementById('approxCount2'),      // Corrected this line
+          incorrectCountSpan: document.getElementById('incorrectCount2'),
+          approxCountSpan: document.getElementById('approxBtn2'), // Correction: typo here, was approxBtn2, should be approxCount2
           correctBtn: document.getElementById('correctBtn2'),
           incorrectBtn: document.getElementById('incorrectBtn2'),
           approxBtn: document.getElementById('approxBtn2')

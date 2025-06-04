@@ -1,32 +1,53 @@
-/* Update this universal rule at the very top of your style.css */
+/* Universal box-sizing for all elements - Put this at the very top */
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
+/* Comprehensive Reset for HTML and Body */
 html, body {
-    overflow-x: hidden; /* Still needed to hide potential scrollbar */
     margin: 0;
     padding: 0;
-    width: 100vw; /* <--- NEW AGGRESSIVE FIX: Force to viewport width */
-    height: 100%; /* Ensure it takes full height too, preventing potential issues */
-    /* box-sizing: border-box is now handled by the universal selector above */
+    width: 100vw; /* Force HTML/body to precisely match viewport width */
+    height: 100%; /* Ensure full height */
+    overflow-x: hidden; /* Hide any lingering horizontal scrollbars */
+    /* Optional: Prevent text scaling on orientation change in Safari/mobile browsers */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
+
+/* Reset common block elements to remove default margins/paddings */
+p, h1, h2, h3, h4, h5, h6, ul, ol, li, figure, figcaption, blockquote, dl, dd {
+    margin: 0;
+    padding: 0;
+}
+
+/* Aggressive Reset for form elements (buttons, inputs) - very important for mobile quirks */
+button, input, select, textarea {
+    margin: 0;
+    font: inherit; /* Inherit font properties from parent */
+    color: inherit; /* Inherit color from parent */
+    border: none; /* Remove default borders */
+    background: none; /* Remove default backgrounds */
+    padding: 0; /* Remove default padding */
+    /* Remove default browser styling for inputs/buttons that can cause layout issues */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* --- Core Layout & App Specific Styles --- */
 
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    display: flex; /* Make the body a flex container */
+    justify-content: center; /* Horizontally centers its direct child (.container) */
+    align-items: flex-start; /* Aligns content to the top */
     min-height: 100vh;
     background-color: #f4f7f6;
     touch-action: manipulation;
 }
-
-/* ... (the rest of your CSS remains the same as your last correct version) ... */
-
-/* * {
-    border: 1px solid red !important;
-} */
 
 .container {
     background-color: #ffffff;
@@ -36,33 +57,7 @@ body {
     text-align: center;
     max-width: 550px;
     width: 100%; /* Crucial: Takes 100% of the *available* width */
-    margin: 20px 0; /* <--- KEY CHANGE: Top/bottom margin only. Left/right centering handled by body flexbox */
-}
-
-/* ... (rest of your existing CSS, no changes needed for this section) ... */
-
-
-@media (max-width: 600px) {
-    /* ... other media query rules ... */
-
-    .target-inputs input[type="text"] {
-        width: 100%; /* Change from calc(100% - 20px) to simply 100% */
-        /* Padding is now handled by box-sizing: border-box universally */
-        padding: 10px; /* Ensure input padding is consistent */
-        margin: 0; /* Ensure no default input margins */
-        /* Aggressive appearance reset for mobile browsers */
-        -webkit-appearance: none; /* For iOS Safari and other WebKit browsers */
-        -moz-appearance: none;    /* For Firefox */
-        appearance: none;         /* Standard property */
-    }
-
-    .container {
-        /* On small screens, try even less padding */
-        padding: 5px; /* <--- Try reducing this further */
-        margin-top: 10px;
-    }
-
-    /* ... rest of your mobile media queries ... */
+    margin: 20px 0; /* Top/bottom margin, 0px left/right (centering by body flex) */
 }
 
 h1 {
@@ -97,12 +92,12 @@ h1 {
 }
 
 .target-inputs input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ced4da;
+    /* Re-apply necessary styles after aggressive input reset */
+    padding: 10px; /* Add padding back */
+    border: 1px solid #ced4da; /* Add border back */
     border-radius: 6px;
     font-size: 1em;
-    width: calc(100% - 20px); /* Account for padding */
-    box-sizing: border-box;
+    width: 100%; /* Ensure 100% width, box-sizing handles padding */
 }
 
 .target-inputs input[type="text"]::placeholder {
@@ -161,9 +156,10 @@ h1 {
 }
 
 .action-btn {
+    /* Re-apply necessary styles after aggressive button reset */
     background-color: #007bff;
     color: white;
-    padding: 15px 20px;
+    padding: 15px 20px; /* Add padding back */
     border: none;
     border-radius: 8px;
     font-size: 1.2em;
@@ -191,7 +187,8 @@ h1 {
 }
 
 .session-btn {
-    padding: 12px 20px;
+    /* Re-apply necessary styles after aggressive button reset */
+    padding: 12px 20px; /* Add padding back */
     border: none;
     border-radius: 8px;
     font-size: 1.1em;
@@ -240,9 +237,10 @@ h1 {
 }
 
 .copy-btn {
+    /* Re-apply necessary styles after aggressive button reset */
     background-color: #28a745;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 15px; /* Add padding back */
     border: none;
     border-radius: 8px;
     font-size: 1em;
@@ -282,8 +280,9 @@ h1 {
 }
 
 .chart-options select {
-    padding: 8px;
-    border: 1px solid #ced4da;
+    /* Re-apply necessary styles after aggressive select reset */
+    padding: 8px; /* Add padding back */
+    border: 1px solid #ced4da; /* Add border back */
     border-radius: 6px;
     font-size: 0.95em;
     background-color: white;
@@ -291,22 +290,23 @@ h1 {
 
 canvas {
     max-width: 100%;
-    max-height: 350px; /* Keeps chart from being too tall */
+    max-height: 350px;
     height: auto;
 }
 
 /* Clear history button */
-.reset-btn { /* Changed class to .reset-btn to match HTML */
+.reset-btn {
+    /* Re-apply necessary styles after aggressive button reset */
     background-color: #dc3545;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 15px; /* Add padding back */
     border: none;
     border-radius: 8px;
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
-    touch-action: manipulation; /* Prevent double-tap zoom */
+    touch-action: manipulation;
 }
 
 .reset-btn:hover {
@@ -317,8 +317,8 @@ canvas {
 /* Media queries for smaller screens */
 @media (max-width: 600px) {
     .container {
-        padding: 15px; /* Adjust as needed, e.g., 10px or 5px */
-        margin-top: 10px; /* Reduce top margin for mobile if desired */
+        padding: 10px; /* Still a good default */
+        margin-top: 10px;
     }
 
     h1 {

@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressChartCanvas = document.getElementById('progressChart');
     const chartTargetSelect = document.getElementById('chartTargetSelect');
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const undoBtn = document.getElementById('undoBtn');
+    let sessionActions = []; // Format: { targetIndex: number, type: 'correct'|'incorrect'|'approx' }
 
     // --- Data Storage ---
     // This will hold the current session's target data
@@ -213,6 +215,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Session Management Functions ---
+    // --- Undo Functions ---
+    function recordAction(targetIndex, type) {
+        sessionActions.push({ targetIndex, type });
+    }
+    
+    function undoLastAction() {
+        if (sessionActions.length > 0) {
+            const lastAction = sessionActions.pop(); // Get and remove the last action
+            const target = currentSessionTargets[lastAction.targetIndex];
+    
+            // Decrement the corresponding count, ensuring it doesn't go below zero
+            if (target && target[lastAction.type] > 0) {
+                target[lastAction.type]--;
+                updateDisplay(); // Update UI
+            } else {
+                // If count is already 0, put the action back on stack and alert
+                sessionActions.push(lastAction);
+                alert('Cannot undo further, the count is already zero.');
+            }
+        } else {
+            alert('No actions to undo for the current session.');
+        }
+    }
+    
     function endCurrentSession() {
         const totalTrialsForSession = currentSessionTargets.reduce((sum, target) => sum + target.correct + target.incorrect + target.approx, 0);
 
@@ -282,22 +308,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Attach event listeners to each target's buttons
-    currentSessionTargets.forEach((target) => { // Removed 'index' from loop as it's not strictly needed here
-        target.correctBtn.addEventListener('click', () => {
-            target.correct++;
-            updateDisplay();
-        });
-
-        target.incorrectBtn.addEventListener('click', () => {
-            target.incorrect++;
-            updateDisplay();
-        });
-
-        target.approxBtn.addEventListener('click', () => {
-            target.approx++;
-            updateDisplay();
-        });
+    currentSessionTargets.forEach((target, targetIndex) => { // Added targetIndex here
+    target.correctBtn.addEventListener('click', () => {
+        target.correct++;
+        recordAction(targetIndex, 'correct'); // NEW: Record the action
+        updateDisplay();
     });
+
+    target.incorrectBtn.addEventListener('click', () => {
+        target.incorrect++;
+        recordAction(targetIndex, 'incorrect'); // NEW: Record the action
+        updateDisplay();
+    });
+
+    target.approxBtn.addEventListener('click', () => {
+        target.approx++;
+        recordAction(targetIndex, 'approx'); // NEW: Record the action
+        updateDisplay();
+    });
+});
 
     // Session control buttons
     endSessionBtn.addEventListener('click', endCurrentSession);
